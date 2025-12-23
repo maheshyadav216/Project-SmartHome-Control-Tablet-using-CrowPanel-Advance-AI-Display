@@ -54,10 +54,10 @@ Refer the [Blog on Hackster](https://www.hackster.io/maheshyadav216/smart-home-c
 
 📜 Source Code, Circuit Diagrams and Documentation : 
 
-🌐 GitHub Repository - 🔗 https://github.com/maheshyadav216/CrowPanel-Advance-7-HMI-ESP32S3-AI-Display     
+🌐 GitHub Repository - 🔗 https://github.com/maheshyadav216/Project-SmartHome-Control-Tablet-using-CrowPanel-Advance-AI-Display     
   
 🌐 Hackster Blog -  
-🔗 https://www.hackster.io/maheshyadav216/crowpanel-advance-7-hmi-esp32-s3-ips-touch-screen-display-151e17   
+🔗 https://www.hackster.io/maheshyadav216/smart-home-control-tablet-using-crowpanel-advance-7-display-4bf583   
   
 ------------------------------------------------------------------------------------------  
 
