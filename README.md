@@ -1,4 +1,4 @@
-# Project-SmartHome-Control-Tablet-using-CrowPanel-Advance-AI-Display
+# Project : SmartHome Control Tablet using CrowPanel Advance AI Display
 Project : SmartHome Control Tablet using CrowPanel Advance 7" Display 
   
 <img src="/Images/hw-overview.png" height="250"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img src="/Images/HMI-tab-hackster-Thumb.png" height="250">  
