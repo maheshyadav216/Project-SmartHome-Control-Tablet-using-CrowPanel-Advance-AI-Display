@@ -1,195 +1,211 @@
-🟢 Raspberry Pi Zero W as MQTT Broker (Mosquitto)
+# 🟢 Raspberry Pi Zero W as MQTT Broker (Mosquitto)
 
-This guide explains how to set up a reliable Mosquitto MQTT Broker on a Raspberry Pi Zero W, used as the central messaging backbone for a Smart Home / IoT system.
+## Project Context
 
-This setup is used in the SmartHome Control Tab project and works with:
+This broker is used in the **SmartHome Control Tab** project:
 
-ESP32-C6 (RoomHub – sensors & relays)
+* **Raspberry Pi Zero W** → MQTT **Broker** (Mosquitto)
+* **ESP32‑C6 (RoomHub)** → MQTT Client (sensors + relays)
+* **ESP32‑S3 CrowPanel (HMI Tablet)** → MQTT Client (UI + control)
+* **Home Assistant** → Optional MQTT Client (NOT the broker)
 
-ESP32-S3 CrowPanel (Portable HMI Tablet)
+---
 
-Home Assistant (optional, as MQTT client only)
+## Assumptions
 
-📋 Assumptions
+* Raspberry Pi Zero W
+* Raspberry Pi OS / Raspberry Pi OS Lite
+* LAN access + SSH or local terminal
+* Static IP via router DHCP reservation (example: `192.168.0.151`)
 
-Raspberry Pi Zero W
+---
 
-Raspberry Pi OS / Raspberry Pi OS Lite (Debian-based)
+## 1. System Update
 
-SSH or local terminal access
-
-Pi connected to the same LAN as ESP32 devices
-
-🧭 Architecture Overview
-Raspberry Pi Zero W
-└── Mosquitto MQTT Broker (port 1883)
-
-ESP32-C6 (RoomHub)
-└── MQTT Client (publish sensors, subscribe commands)
-
-ESP32-S3 CrowPanel
-└── MQTT Client (subscribe sensors, publish UI commands)
-
-Home Assistant (optional)
-└── MQTT Client (NO broker)
-
-1️⃣ Prepare Raspberry Pi Zero W
-
-Update the system:
-
+```bash
 sudo apt update && sudo apt upgrade -y
+```
 
+Verify time:
 
-Check system time:
-
+```bash
 timedatectl
+```
 
+---
 
-⚠️ Recommended:
-Set a DHCP reservation in your router so the Pi always gets the same IP
-Example used below: 192.168.0.151
+## 2. Install Mosquitto Broker & Clients
 
-2️⃣ Install Mosquitto Broker & Clients
-
-Install Mosquitto and client tools:
-
+```bash
 sudo apt install -y mosquitto mosquitto-clients
+```
 
+Enable and start the broker:
 
-Enable and start Mosquitto:
-
+```bash
 sudo systemctl enable mosquitto
 sudo systemctl start mosquitto
 sudo systemctl status mosquitto
+```
 
+Expected result:
 
-✅ You should see:
-
+```
 Active: active (running)
+```
 
-3️⃣ Create MQTT User & Password
+---
 
-Create the password file and user:
+## 3. Create MQTT User & Password
 
+Create password file and user:
+
+```bash
 sudo mosquitto_passwd -c /etc/mosquitto/passwd mqttuser
+```
 
+Enter password when prompted:
 
-You’ll be prompted for a password:
+```
+mqttpassword
+```
 
-Password: mqttpassword
+⚠️ Use `-c` only the **first time**.
 
+---
 
-📌 Notes:
+## 4. Broker Configuration (Minimal & Correct)
 
-Use -c only once
+Create config file:
 
-To add more users later, omit -c
-
-4️⃣ Create Minimal Broker Configuration
-
-Create a local config file:
-
+```bash
 sudo nano /etc/mosquitto/conf.d/local.conf
+```
 
+Paste **exactly**:
 
-Paste exactly this:
-
+```conf
 listener 1883
 allow_anonymous false
 password_file /etc/mosquitto/passwd
+```
 
+Save & exit:
 
-Save and exit:
+```
+Ctrl+O → Enter
+Ctrl+X
+```
 
-Ctrl + O → Enter
-Ctrl + X
+Restart broker:
 
-
-Restart Mosquitto:
-
+```bash
 sudo systemctl restart mosquitto
 sudo systemctl status mosquitto
+```
 
-5️⃣ Verify Broker Locally (IMPORTANT)
-Terminal 1 — Subscribe
+---
+
+## 5. Local Broker Test (MANDATORY)
+
+### Terminal 1 — Subscribe
+
+```bash
 mosquitto_sub -h localhost -t test/topic -u mqttuser -P mqttpassword -v
+```
 
-Terminal 2 — Publish
+### Terminal 2 — Publish
+
+```bash
 mosquitto_pub -h localhost -t test/topic -m "hello-from-pi" -u mqttuser -P mqttpassword
+```
 
+Expected output:
 
-✅ You should see:
-
+```
 test/topic hello-from-pi
+```
 
-6️⃣ Verify from Another Device (LAN Test)
+---
 
-From PC / Laptop / another Pi:
+## 6. LAN Test (From Another Device)
 
+```bash
 mosquitto_sub -h 192.168.0.151 -t test/topic -u mqttuser -P mqttpassword -v
+```
 
+---
 
-Publish from any MQTT client to confirm network access.
-
-7️⃣ (Optional) Enable Persistence
+## 7. Enable Persistence (SAFE METHOD)
 
 Edit main config:
 
+```bash
 sudo nano /etc/mosquitto/mosquitto.conf
+```
 
+Ensure it contains:
 
-Ensure only one place has persistence:
-
+```conf
 persistence true
 persistence_location /var/lib/mosquitto/
 include_dir /etc/mosquitto/conf.d
+```
 
-
-⚠️ Do NOT duplicate persistence_location in local.conf
+⚠️ **DO NOT** add persistence settings in `local.conf`.
 
 Restart:
 
+```bash
 sudo systemctl restart mosquitto
+```
 
-8️⃣ Home Assistant Configuration (IMPORTANT)
+---
 
-If using Home Assistant:
+## 8. Home Assistant Configuration
 
-✅ What to DO
+### Correct Setup
 
-Keep MQTT Integration
+* Keep **MQTT Integration**
+* Use **external broker**
 
-Configure it to use external broker:
-
+```
 Broker:   192.168.0.151
 Port:     1883
 Username: mqttuser
 Password: mqttpassword
+```
 
-❌ What NOT to DO
+### Do NOT
 
-Do NOT run Mosquitto add-on in HA
+* ❌ Do NOT run Mosquitto add‑on in HA
+* ❌ Do NOT let HA act as broker
 
-Do NOT let HA be the broker
+---
 
-✅ Final Result
+## Final Result
 
-You now have:
+* MQTT broker runs independently on Pi Zero W
+* ESP32 devices continue working even if Home Assistant is offline
+* CrowPanel HMI remains responsive
+* Clean, production‑grade architecture
 
-🟢 Raspberry Pi Zero W as independent MQTT Broker
+---
 
-🟢 ESP32 devices fully decoupled from Home Assistant uptime
+## Troubleshooting
 
-🟢 Portable CrowPanel HMI working standalone
+Check logs:
 
-🟢 Production-grade architecture for demos & portfolio
+```bash
+sudo journalctl -u mosquitto -n 50 --no-pager
+```
 
-📌 Why This Setup Matters
+Verify config files:
 
-Home Assistant can reboot → system still works
+```bash
+sudo mosquitto -c /etc/mosquitto/mosquitto.conf -v
+```
 
-ESP32 devices stay in sync
+---
 
-HMI tablet remains responsive
-
-Clean separation of broker vs clients
+✅ This file is **ready to commit** as `README.md`.
