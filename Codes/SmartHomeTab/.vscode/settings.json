@@ -1,0 +1,21 @@
+{
+    "idf.flashType": "UART",
+    "idf.espIdfPathWin": "d:\\Application\\ESP-IDF\\ESP-IDF5.2.1\\Espressif\\frameworks\\esp-idf-v5.2.1",
+    "idf.toolsPathWin": "d:\\Application\\ESP-IDF\\ESP-IDF5.2.1\\Espressif\\tools",
+    "idf.pythonInstallPath": "/usr/bin/python3",
+    "idf.openOcdConfigs": [
+        "board/esp32s3-builtin.cfg"
+    ],
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "C:\\Users\\sea\\.espressif\\tools\\openocd-esp32\\v0.11.0-esp32-20211220/openocd-esp32/share/openocd/scripts",
+        "IDF_CCACHE_ENABLE": "1",
+        "IDF_TARGET": "esp32s3"
+    },
+    "idf.portWin": "COM3",
+    "idf.port": "/dev/ttyUSB0",
+    "idf.espIdfPath": "/home/ai/esp/v5.5.1/esp-idf",
+    "idf.toolsPath": "/home/ai/.espressif",
+    "files.associations": {
+        "lv_font_loader.h": "c"
+    }
+}
