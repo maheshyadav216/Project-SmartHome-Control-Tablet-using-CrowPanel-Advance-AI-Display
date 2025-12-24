@@ -1,7 +1,7 @@
 # Project : SmartHome Control Tablet using CrowPanel Advance AI Display
 Project : SmartHome Control Tablet using CrowPanel Advance 7" Display 
   
-<img src="/Images/SmartTab-GT.jpg" height="200"> &nbsp; &nbsp; &nbsp; <img src="/Images/HMI-tab-hackster-Thumb5.gif" height="200">  
+<img src="/Images/SmartTab-GT.jpg" height="200"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img src="/Images/HMI-tab-hackster-Thumb5.gif" height="200">  
   
 **SmartHome Control Tab** is a portfolio-grade embedded systems project built around a portable smart home control tablet using the CrowPanel Advance 7-inch HMI powered by ESP32-S3. Instead of relying on smartphones or wall-mounted panels, this project demonstrates how a dedicated handheld HMI can act as a reliable, always-on smart home interface. The tablet features a high-resolution IPS touch display running LVGL, providing real-time visualization of environmental data (temperature, humidity, light) and interactive controls for home appliances. Communication with the smart home backend is handled over MQTT, allowing seamless integration with systems like Home Assistant while keeping the device responsive and independent.
 
